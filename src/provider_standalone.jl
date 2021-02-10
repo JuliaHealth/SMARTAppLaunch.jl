@@ -1,7 +1,11 @@
 """
-    smart_standalone_step1(config::SMARTStandaloneConfig; scope::AbstractString = "launch")
+    provider_standalone_step1(config::ProviderStandaloneConfig; kwargs...)
+
+## Optional Keyword Arguments:
+- `scope::AbstractString`. Default value: `"launch"`.
 """
-function smart_standalone_step1(config::SMARTStandaloneConfig; scope::AbstractString = "launch")
+function provider_standalone_step1(config::ProviderStandaloneConfig;
+                                   scope::AbstractString = "launch")
     uri = URIs.URI(
         URIs.URI(config.authorize_endpoint);
         query = Dict(
@@ -23,24 +27,26 @@ function smart_standalone_step1(config::SMARTStandaloneConfig; scope::AbstractSt
 end
 
 """
-    smart_standalone_step2(config::SMARTStandaloneConfig, uri_string::AbstractString)
+    provider_standalone_step2(config::ProviderStandaloneConfig, uri_string::AbstractString)
 """
-function smart_standalone_step2(config::SMARTStandaloneConfig, uri_string::AbstractString)
+function provider_standalone_step2(config::ProviderStandaloneConfig,
+                                   uri_string::AbstractString)
     uri = URIs.URI(uri_string)
-    return smart_standalone_step2(config, uri)
+    return provider_standalone_step2(config, uri)
 end
 
 """
-    smart_standalone_step2(config::SMARTStandaloneConfig, uri::URIs.URI)
+    provider_standalone_step2(config::ProviderStandaloneConfig, uri::URIs.URI)
 """
-function smart_standalone_step2(config::SMARTStandaloneConfig, uri::URIs.URI)
+function provider_standalone_step2(config::ProviderStandaloneConfig,
+                                   uri::URIs.URI)
     queryparams = URIs.queryparams(uri)
     code = queryparams["code"]
     code_is_jwt = is_jwt(code)
 
     _response = HTTP.request(
         "POST",
-        config.oauth2_endpoint;
+        config.token_endpoint;
         headers = Dict("Content-Type" => "application/x-www-form-urlencoded"),
         body = URIs.escapeuri(Dict(
             "client_id" => config.client_id,
@@ -65,7 +71,7 @@ function smart_standalone_step2(config::SMARTStandaloneConfig, uri::URIs.URI)
         access_token_jwt_decoded = Dict{String, Any}()
     end
 
-    result = SMARTStandaloneResult(;
+    result = ProviderStandaloneResult(;
         code                     = code,
         code_is_jwt              = code_is_jwt,
         code_jwt_decoded         = code_jwt_decoded,
