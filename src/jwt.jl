@@ -3,8 +3,8 @@ function is_jwt(contents::AbstractString)
         JSONWebTokens.decode(JSONWebTokens.None(), contents)
         return true
     catch
-        return false
     end
+    return false
 end
 
 function decode_jwt(contents::AbstractString)
