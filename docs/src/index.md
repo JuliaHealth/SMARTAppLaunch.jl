@@ -27,8 +27,8 @@ in the future:
 | Standard/Specification | Description |
 | ---------------------- | ----------- |
 | [CDS Hooks](https://cds-hooks.hl7.org/) | Clinical Decision Support Hooks. Web standard for CDS in the EHR workflow. |
-| [FHIR Bulk Data API](https://hl7.org/fhir/uv/bulkdata/) | FHIR export API for large-scale data access. |
+| [FHIR Bulk Data Access (Flat FHIR)](https://hl7.org/fhir/uv/bulkdata/) | FHIR export API for large-scale data access. |
 | [SMART Backend Services](https://hl7.org/fhir/uv/bulkdata/authorization/) | Server-to-server FHIR connections. |
 
-These descriptions are taken from
-[https://docs.smarthealthit.org/](https://docs.smarthealthit.org/).
+These descriptions are taken from the
+[SMART on FHIR technical documentation](https://docs.smarthealthit.org/).
