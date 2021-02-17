@@ -18,8 +18,6 @@ for building SMART-on-FHIR applications.
 The source code for this package is available in the
 [GitHub repository](https://github.com/JuliaHealth/SMARTAppLaunch.jl).
 
-
-
 The following tables show the mapping between Julia packages and
 standards/specifications:
 
