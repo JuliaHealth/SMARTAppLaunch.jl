@@ -5,4 +5,9 @@
 [![Build Status](https://github.com/JuliaHealth/SMARTAppLaunch.jl/workflows/CI/badge.svg)](https://github.com/JuliaHealth/SMARTAppLaunch.jl/actions)
 [![Coverage](https://codecov.io/gh/JuliaHealth/SMARTAppLaunch.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaHealth/SMARTAppLaunch.jl)
 
-This package implements the [SMART App Launch Framework](https://www.hl7.org/fhir/smart-app-launch/) for building SMART-on-FHIR applications.
+This package implements the
+[SMART App Launch Framework](https://www.hl7.org/fhir/smart-app-launch/)
+for building SMART-on-FHIR applications.
+
+Please see the
+[documentation](https://juliahealth.org/SMARTAppLaunch.jl/stable/).
