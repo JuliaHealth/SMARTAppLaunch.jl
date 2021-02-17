@@ -1,4 +1,16 @@
 """
+    ProviderEHRLaunchConfig(; kwargs...)
+
+## Required Keyword Arguments:
+- `client_id::String`
+- `redirect_uri::String`
+"""
+Base.@kwdef struct ProviderEHRLaunchConfig
+    client_id::String
+    redirect_uri::String
+end
+
+"""
     ProviderStandaloneConfig(; kwargs...)
 
 ## Required Keyword Arguments:
@@ -14,15 +26,53 @@ Base.@kwdef struct ProviderStandaloneConfig
     token_endpoint::String
 end
 
-Base.@kwdef struct ProviderStandaloneResult
-    code::String
-    code_is_jwt::Bool = false
-    code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+Base.@kwdef struct _AuthorizationCodeInformation
+    authorization_code::String
+    client_id::String
+    redirect_uri::String
+    token_endpoint::String
+end
+
+Base.@kwdef struct _AccessTokenInformation
     access_token::String
     access_token_is_jwt::Bool = false
     access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
     access_token_response::Dict{Symbol, Any}
+    authorization_code::String
+    authorization_code_is_jwt::Bool = false
+    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
 end
+
+Base.@kwdef struct ProviderEHRLaunchResult
+    access_token::String
+    access_token_is_jwt::Bool = false
+    access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    access_token_response::Dict{Symbol, Any}
+    authorization_code::String
+    authorization_code_is_jwt::Bool = false
+    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    launch_token::String
+    launch_token_is_jwt::Bool = false
+    launch_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+end
+
+Base.@kwdef struct ProviderStandaloneResult
+    access_token::String
+    access_token_is_jwt::Bool = false
+    access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    access_token_response::Dict{Symbol, Any}
+    authorization_code::String
+    authorization_code_is_jwt::Bool = false
+    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+end
+
+"""
+    get_access_token(result::ProviderEHRLaunchResult)
+"""
+function get_access_token(result::ProviderEHRLaunchResult)
+    return result.access_token::String
+end
+
 
 """
     get_access_token(result::ProviderStandaloneResult)

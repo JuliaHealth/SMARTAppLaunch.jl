@@ -8,5 +8,5 @@ function is_jwt(contents::AbstractString)
 end
 
 function decode_jwt(contents::AbstractString)
-    return JSONWebTokens.decode(JSONWebTokens.None(), contents)::Dict{String, Any}
+    return JSONWebTokens.decode(JSONWebTokens.None(), contents)
 end
