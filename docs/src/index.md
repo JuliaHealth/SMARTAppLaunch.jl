@@ -4,13 +4,6 @@ CurrentModule = SMARTAppLaunch
 
 # SMARTAppLaunch
 
-```@index
-```
-
-```@autodocs
-Modules = [SMARTAppLaunch]
-```
-
 This package implements the
 [SMART App Launch Framework](https://www.hl7.org/fhir/smart-app-launch/)
 for building SMART-on-FHIR applications.
