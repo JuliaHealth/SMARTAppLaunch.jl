@@ -79,12 +79,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig,
 
     access_token_info = authorization_code_to_access_token(authz_code_info)
 
-    launch_token_is_jwt = is_jwt(launch_token)
-    if launch_token_is_jwt
-        launch_token_jwt_decoded = decode_jwt(launch_token)::Dict{String, Any}
-    else
-        launch_token_jwt_decoded = Dict{String, Any}()
-    end
+    launch_token_is_jwt, launch_token_jwt_decoded = try_decode_jwt(launch_token)
 
     ehr_launch_result = ProviderEHRLaunchResult(;
         authorization_code             = access_token_info.authorization_code,

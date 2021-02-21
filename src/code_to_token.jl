@@ -18,19 +18,8 @@ function authorization_code_to_access_token(authz_code_info::_AuthorizationCodeI
     access_token_response = JSON3.read(String(_response.body))
     access_token = access_token_response.access_token
 
-    authorization_code_is_jwt = is_jwt(authorization_code)
-    if authorization_code_is_jwt
-        authorization_code_jwt_decoded = decode_jwt(authorization_code)::Dict{String, Any}
-    else
-        authorization_code_jwt_decoded = Dict{String, Any}()
-    end
-
-    access_token_is_jwt = is_jwt(access_token)
-    if access_token_is_jwt
-        access_token_jwt_decoded = decode_jwt(access_token)::Dict{String, Any}
-    else
-        access_token_jwt_decoded = Dict{String, Any}()
-    end
+    authorization_code_is_jwt, authorization_code_jwt_decoded = try_decode_jwt(authorization_code)
+    access_token_is_jwt, access_token_jwt_decoded = try_decode_jwt(access_token)
 
     access_token_info = _AccessTokenInformation(;
         authorization_code             = authorization_code,

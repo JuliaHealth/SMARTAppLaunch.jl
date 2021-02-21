@@ -1,12 +1,8 @@
-function is_jwt(contents::AbstractString)
+function try_decode_jwt(contents::AbstractString)
     try
-        JSONWebTokens.decode(JSONWebTokens.None(), contents)
-        return true
+        jwt_decoded = JSONWebTokens.decode(JSONWebTokens.None(), contents)
+        return true, jwt_decoded
     catch
     end
-    return false
-end
-
-function decode_jwt(contents::AbstractString)
-    return JSONWebTokens.decode(JSONWebTokens.None(), contents)
+    return false, Dict{String, Any}()
 end
