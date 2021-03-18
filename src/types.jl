@@ -77,14 +77,14 @@ end
     HealthBase.has_fhir_patient_id(result::ProviderEHRLaunchResult)
 """
 function HealthBase.has_fhir_patient_id(result::ProviderEHRLaunchResult)
-    return haskey(smart_result.access_token_response, :patient)
+    return haskey(result.access_token_response, :patient)
 end
 
 """
     HealthBase.get_fhir_patient_id(result::ProviderEHRLaunchResult)
 """
 function HealthBase.get_fhir_patient_id(result::ProviderEHRLaunchResult)
-    return smart_result.access_token_response[:patient]
+    return result.access_token_response[:patient]
 end
 
 """
