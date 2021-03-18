@@ -67,16 +67,29 @@ Base.@kwdef struct ProviderStandaloneResult
 end
 
 """
-    get_access_token(result::ProviderEHRLaunchResult)
+    HealthBase.get_fhir_access_token(result::ProviderEHRLaunchResult)
 """
-function get_access_token(result::ProviderEHRLaunchResult)
-    return result.access_token::String
+function HealthBase.get_fhir_access_token(result::ProviderEHRLaunchResult)
+    return result.access_token
 end
 
+"""
+    HealthBase.has_fhir_patient_id(result::ProviderEHRLaunchResult)
+"""
+function HealthBase.has_fhir_patient_id(result::ProviderEHRLaunchResult)
+    return haskey(smart_result.access_token_response, :patient)
+end
 
 """
-    get_access_token(result::ProviderStandaloneResult)
+    HealthBase.get_fhir_patient_id(result::ProviderEHRLaunchResult)
 """
-function get_access_token(result::ProviderStandaloneResult)
-    return result.access_token::String
+function HealthBase.get_fhir_patient_id(result::ProviderEHRLaunchResult)
+    return smart_result.access_token_response[:patient]
+end
+
+"""
+    HealthBase.get_fhir_access_token(result::ProviderStandaloneResult)
+"""
+function HealthBase.get_fhir_access_token(result::ProviderStandaloneResult)
+    return result.access_token
 end
