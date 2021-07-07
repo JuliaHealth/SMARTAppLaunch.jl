@@ -20,7 +20,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig,
                              uri_string::AbstractString;
                              kwargs...)
     uri = URIs.URI(uri_string)
-    return provider_ehr_launch(config, queryparams(uri); kwargs...)
+    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
 end
 
 """
