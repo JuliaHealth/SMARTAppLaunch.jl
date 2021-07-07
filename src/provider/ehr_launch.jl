@@ -32,7 +32,7 @@ end
 function provider_ehr_launch(config::ProviderEHRLaunchConfig,
                              uri::URIs.URI;
                              scope::AbstractString = "launch")
-    return provider_ehr_launch(config, queryparams(uri); kwargs...)
+    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
 end
 """
     provider_ehr_launch(config::ProviderEHRLaunchConfig, queryparams::Dict; kwargs...)
