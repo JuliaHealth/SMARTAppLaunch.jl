@@ -1,50 +1,59 @@
 # Note: The "EHR Launch" workflow is also known as the "Embedded Launch" workflow.
 
-function _get_endpoints_from_extension(extension)
-    endpoints = Dict{String, String}()
-    for e ∈ extension
-        value_uri = e.valueUri
-        url = e.url
-        endpoints[url] = value_uri
-    end
-    return endpoints
-end
+const _default_scope = "launch"
 
 """
-    provider_ehr_launch(config::ProviderEHRLaunchConfig, uri_string::AbstractString; kwargs...)
+    provider_ehr_launch(config::ProviderEHRLaunchConfig, uri_string::String; kwargs...)
 
 ## Optional Keyword Arguments:
-- `scope::AbstractString`. Default value: `"launch"`.
+- `scope::AbstractString`. Default value: `$(_default_scope)`.
 """
-function provider_ehr_launch(config::ProviderEHRLaunchConfig,
-                             uri_string::AbstractString;
-                             kwargs...)
-    uri = URIs.URI(uri_string)
-    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
+function provider_ehr_launch(config::ProviderEHRLaunchConfig, uri_string::AbstractString; kwargs...)
+    uri = URIs.URI(uri_string)::URIs.URI
+    return provider_ehr_launch(config, uri; kwargs...)
 end
 
 """
     provider_ehr_launch(config::ProviderEHRLaunchConfig, uri::URIs.URI; kwargs...)
 
 ## Optional Keyword Arguments:
-- `scope::AbstractString`. Default value: `"launch"`.
+- `scope::AbstractString`. Default value: `$(_default_scope)`.
 """
 function provider_ehr_launch(config::ProviderEHRLaunchConfig,
                              uri::URIs.URI;
-                             scope::AbstractString = "launch")
-    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
+                             scope::AbstractString = _default_scope)
+    queryparams = URIs.queryparams(uri)::Dict{String, String}
+    return provider_ehr_launch(config, queryparams; kwargs...)
 end
+
 """
     provider_ehr_launch(config::ProviderEHRLaunchConfig, queryparams::Dict; kwargs...)
 
 ## Optional Keyword Arguments:
-- `scope::AbstractString`. Default value: `"launch"`.
+- `scope::String`. Default value: `$(_default_scope)`.
 """
 function provider_ehr_launch(config::ProviderEHRLaunchConfig,
-                             queryparams::Dict;
-                             scope::AbstractString = "launch")
-    iss          = queryparams["iss"]
-    launch_token = queryparams["launch"]
+                             queryparams::Dict{String, String};
+                             scope::AbstractString = _default_scope)
+    iss          = queryparams["iss"]::String
+    launch_token = queryparams["launch"]::String
+    return provider_ehr_launch(config; iss, launch_token, scope)
+end
+
+"""
+    provider_ehr_launch(config::ProviderEHRLaunchConfig; iss::String, launch_token::String, kwargs...)
+
+## Required Keyword Arguments:
+- `iss::String`
+- `launch_token::String`
+
+## Optional Keyword Arguments:
+- `scope::String`. Default value: `$(_default_scope)`.
+"""
+function provider_ehr_launch(config::ProviderEHRLaunchConfig;
+                             iss::String,
+                             launch_token::String,
+                             scope::AbstractString = _default_scope)
     iss_metadata_endpoint = "$(iss)/Metadata"
     metadata_response = HTTP.request(
         "GET",
@@ -102,7 +111,17 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig,
         launch_token                   = launch_token,
         launch_token_is_jwt            = launch_token_is_jwt,
         launch_token_jwt_decoded       = launch_token_jwt_decoded,
-    )
+    )::ProviderEHRLaunchResult
 
     return ehr_launch_result
+end
+
+function _get_endpoints_from_extension(extension)
+    endpoints = Dict{String, String}()
+    for e ∈ extension
+        value_uri = e.valueUri
+        url = e.url
+        endpoints[url] = value_uri
+    end
+    return endpoints
 end
