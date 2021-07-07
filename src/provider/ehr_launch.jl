@@ -20,7 +20,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig,
                              uri_string::AbstractString;
                              kwargs...)
     uri = URIs.URI(uri_string)
-    return provider_ehr_launch(config, uri; kwargs...)
+    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
 end
 
 """
@@ -32,7 +32,17 @@ end
 function provider_ehr_launch(config::ProviderEHRLaunchConfig,
                              uri::URIs.URI;
                              scope::AbstractString = "launch")
-    queryparams = URIs.queryparams(uri)
+    return provider_ehr_launch(config, URIs.queryparams(uri); kwargs...)
+end
+"""
+    provider_ehr_launch(config::ProviderEHRLaunchConfig, queryparams::Dict; kwargs...)
+
+## Optional Keyword Arguments:
+- `scope::AbstractString`. Default value: `"launch"`.
+"""
+function provider_ehr_launch(config::ProviderEHRLaunchConfig,
+                             queryparams::Dict;
+                             scope::AbstractString = "launch")
     iss          = queryparams["iss"]
     launch_token = queryparams["launch"]
     iss_metadata_endpoint = "$(iss)/Metadata"
