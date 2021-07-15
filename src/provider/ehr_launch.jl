@@ -84,12 +84,14 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
         redirect = false,
     )
     headers = Dict(authorize_response.headers)
-    auth_error_msg = string(
-        "Something when wrong when authenticating to the EHR. ",
-        "One possible explanation is that your `redirect_uri` value does not exactly ",
-        "match any of the `redirect_uri` values that are on file with the EHR.",
-    )
-    haskey(headers, "Location") || @error(auth_error_msg)
+    let 
+        auth_error_msg = string(
+            "Something when wrong when authenticating to the EHR. ",
+            "One possible explanation is that your `redirect_uri` value does not exactly ",
+            "match any of the `redirect_uri` values that are on file with the EHR.",
+        )
+        haskey(headers, "Location") || throw(ErrorException(auth_error_msg))
+    end
     location = headers["Location"]
     location_uri = URIs.URI(location)
     location_queryparams = URIs.queryparams(location_uri)
