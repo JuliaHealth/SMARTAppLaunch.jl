@@ -98,7 +98,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
     location_queryparams = URIs.queryparams(location_uri)
 
     let
-        error_msg = "Encountered an error while trying to authenticate to the EHR.",
+        error_msg = "Encountered an error while trying to authenticate to the EHR."
         haskey(location_queryparams, "error")             && @error "Error: $(location_queryparams["error"])" 
         haskey(location_queryparams, "error_description") && @error "Error: $(location_queryparams["error_description"])"
         haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
