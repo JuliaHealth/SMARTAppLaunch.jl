@@ -10,4 +10,5 @@ jobs:
       # - uses: JuliaRegistries/compathelper-action@v1 # TODO: uncomment this line
       - uses: JuliaRegistries/compathelper-action@main # TODO: delete this line
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           ssh: ${{ secrets.DOCUMENTER_KEY }}
