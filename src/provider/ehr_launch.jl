@@ -71,11 +71,11 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
     authorize_uri_with_querystring_params = URIs.URI(
         URIs.URI(authorize_endpoint);
         query = Dict(
-            "client_id" => config.client_id,
-            "launch" => launch_token,
-            "redirect_uri" => config.redirect_uri,
+            "client_id"     => config.client_id,
+            "launch"        => launch_token,
+            "redirect_uri"  => config.redirect_uri,
             "response_type" => "code",
-            "scope" => scope,
+            "scope"         => scope,
         )
     )
     authorize_response = HTTP.request(
@@ -85,7 +85,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
     )
     headers = Dict(authorize_response.headers)
 
-    let 
+    let
         error_msg = string(
             "Something when wrong when authenticating to the EHR. ",
             "One possible explanation is that your `redirect_uri` value does not exactly ",
@@ -99,7 +99,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
 
     let
         error_msg = "Encountered an error while trying to authenticate to the EHR."
-        haskey(location_queryparams, "error")             && @error "Error: $(location_queryparams["error"])" 
+        haskey(location_queryparams, "error")             && @error "Error: $(location_queryparams["error"])"
         haskey(location_queryparams, "error_description") && @error "Error: $(location_queryparams["error_description"])"
         haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
     end
