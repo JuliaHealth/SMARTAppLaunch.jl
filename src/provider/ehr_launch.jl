@@ -71,6 +71,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
     authorize_uri_with_querystring_params = URIs.URI(
         URIs.URI(authorize_endpoint);
         query = Dict(
+            "aud"           => iss,
             "client_id"     => config.client_id,
             "launch"        => launch_token,
             "redirect_uri"  => config.redirect_uri,
