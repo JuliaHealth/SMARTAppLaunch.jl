@@ -212,15 +212,20 @@ function provider_ehr_launch_part_three(
         haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
     end
     authorization_code = location_queryparams["code"]::String
-    state = location_queryparams["state"]::String
+    state              = location_queryparams["state"]::String
     state_json = Base64.base64decode(state)
     state_dict = JSON3.read(state_json)
-    token_endpoint = state_dict[:token_endpoint]::String
+    token_endpoint_original = state_dict[:token_endpoint]::String
+    token_endpoint_stripped = strip(token_endpoint_stripped)
+    if isempty(token_endpoint_stripped)
+        msg = "Could not extract the `token_endpoint` from the `state`"
+        throw(ErrorException(msg))
+    end
     authz_code_info = _AuthorizationCodeInformation(;
-        authorization_code = authorization_code,
-        client_id          = config.client_id,
-        redirect_uri       = config.redirect_uri,
-        token_endpoint     = token_endpoint,
+        authorization_code,
+        client_id      = config.client_id,
+        redirect_uri   = config.redirect_uri,
+        token_endpoint = token_endpoint_stripped,
     )
     access_token_info = authorization_code_to_access_token(authz_code_info)
     launch_token_is_jwt, launch_token_jwt_decoded = try_decode_jwt(launch_token)
