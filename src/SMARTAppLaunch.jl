@@ -1,5 +1,6 @@
 module SMARTAppLaunch
 
+import Base64
 import HTTP
 import HealthBase
 import JSON3
