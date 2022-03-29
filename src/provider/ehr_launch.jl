@@ -54,7 +54,7 @@ function provider_ehr_launch(config::ProviderEHRLaunchConfig;
                              iss::String,
                              launch_token::String,
                              scope::AbstractString = _default_scope)
-    iss_metadata_endpoint = "$(iss)/Metadata"
+    iss_metadata_endpoint = "$(iss)/metadata"
     metadata_response = HTTP.request(
         "GET",
         iss_metadata_endpoint;
