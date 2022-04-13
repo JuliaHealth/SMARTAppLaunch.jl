@@ -203,7 +203,7 @@ end
 function provider_ehr_launch_part_three(
         config::ProviderEHRLaunchConfig,
         location_queryparams::AbstractDict;
-        launch_token::String = "",
+        launch_token::String = "", #used for debugging in case ehr provides it, might not be present in all ehrs
     )
     let
         error_msg = "Encountered an error while trying to authenticate to the EHR."
