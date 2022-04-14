@@ -216,7 +216,7 @@ function provider_ehr_launch_part_three(
     state_json = Base64.base64decode(state)
     state_dict = JSON3.read(state_json)
     token_endpoint_original = state_dict[:token_endpoint]::String
-    token_endpoint_stripped = strip(token_endpoint_stripped)
+    token_endpoint_stripped = strip(token_endpoint_original)
     if isempty(token_endpoint_stripped)
         msg = "Could not extract the `token_endpoint` from the `state`"
         throw(ErrorException(msg))
