@@ -212,7 +212,7 @@ function provider_ehr_launch_part_three(
         haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
     end
     authorization_code = location_queryparams["code"]::String
-    state              = location_queryparams["state"]::String *"=="
+    state = location_queryparams["state"]::String * "==" #padding is needed for `base64decode` to work, https://github.com/JuliaLang/julia/pull/44503
     state_json = Base64.base64decode(state)
     state_dict = JSON3.read(state_json)
     token_endpoint_original = state_dict[:token_endpoint]::String
