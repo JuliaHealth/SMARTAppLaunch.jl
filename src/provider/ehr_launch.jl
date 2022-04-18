@@ -208,7 +208,7 @@ function provider_ehr_launch_part_three(
     let
         error_msg = "Encountered an error while trying to authenticate to the EHR."
         haskey(location_queryparams, "error")             && @error "Error: $(location_queryparams["error"])"
-        haskey(location_queryparams, "error_description") && @error "Error: $(location_queryparams["error_description"])"
+        haskey(location_queryparams, "error_description") && @error "Error description: $(location_queryparams["error_description"])"
         haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
     end
     authorization_code = location_queryparams["code"]::String
