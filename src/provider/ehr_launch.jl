@@ -116,45 +116,45 @@ end
 - `additional_state::Union{String, Nothing}`. Default value: `nothing`.
 """
 function provider_ehr_launch_part_one(
-        config::ProviderEHRLaunchConfig;
-        iss::String,
-        launch_token::String,
-        scope::String = _default_scope,
-        additional_state::Union{Dict, Nothing} = nothing,
-    )
+    config::ProviderEHRLaunchConfig;
+    iss::String,
+    launch_token::String,
+    scope::String=_default_scope,
+    additional_state::Union{Dict,Nothing}=nothing
+)
     iss_metadata_endpoint = "$(iss)/metadata"
     metadata_response = HTTP.request(
         "GET",
         iss_metadata_endpoint;
-        headers = Dict(
+        headers=Dict(
             "Accept" => "application/fhir+json",
             "Epic-Client-ID" => config.client_id,
-        ),
+        )
     )
     metadata_response_json = JSON3.read(String(metadata_response.body))
     extension = metadata_response_json.rest[1].security.extension[1].extension
     endpoints = _get_endpoints_from_extension(extension)
     authorize_endpoint = endpoints["authorize"]::String
-    token_endpoint     = endpoints["token"]::String
+    token_endpoint = endpoints["token"]::String
 
-    state_dict = Dict{Symbol, String}()
-    state_dict[:token_endpoint] = token_endpoint
+    state_dict = Dict{Symbol,String}()
     if additional_state !== nothing
         merge!(state_dict, additional_state)
     end
+    state_dict[:token_endpoint] = token_endpoint
     state_json = JSON3.write(state_dict)
     state = Base64.base64encode(state_json)
 
     authorize_uri_with_querystring_params = URIs.URI(
         URIs.URI(authorize_endpoint);
-        query = Dict(
-            "aud"           => iss,
-            "client_id"     => config.client_id,
-            "launch"        => launch_token,
-            "redirect_uri"  => config.redirect_uri,
+        query=Dict(
+            "aud" => iss,
+            "client_id" => config.client_id,
+            "launch" => launch_token,
+            "redirect_uri" => config.redirect_uri,
             "response_type" => "code",
-            "scope"         => scope,
-            "state"         => state,
+            "scope" => scope,
+            "state" => state,
         )
     )
     return authorize_uri_with_querystring_params
