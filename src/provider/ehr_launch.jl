@@ -120,7 +120,7 @@ function provider_ehr_launch_part_one(
         iss::String,
         launch_token::String,
         scope::String = _default_scope,
-        additional_state::Union{String, Nothing} = nothing,
+        additional_state::Union{Dict, Nothing} = nothing,
     )
     iss_metadata_endpoint = "$(iss)/metadata"
     metadata_response = HTTP.request(
@@ -140,10 +140,7 @@ function provider_ehr_launch_part_one(
     state_dict = Dict{Symbol, String}()
     state_dict[:token_endpoint] = token_endpoint
     if additional_state !== nothing
-        additional_state_stripped = strip(additional_state)
-        if !isempty(additional_state_stripped)
-            state_dict[:additional_state] = additional_state_stripped
-        end
+        merge!(state_dict, additional_state)
     end
     state_json = JSON3.write(state_dict)
     state = Base64.base64encode(state_json)
