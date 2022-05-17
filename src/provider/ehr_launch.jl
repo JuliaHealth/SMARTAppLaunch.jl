@@ -190,6 +190,24 @@ function provider_ehr_launch_part_two(
     return location_queryparams
 end
 
+@static if Base.VERSION >= v"1.9-"
+    const my_base64decode = Base64.base64decode
+else
+    # padding is needed for `base64decode` to work on older versions of Julia
+    # https://github.com/JuliaLang/julia/pull/44503
+    function my_base64decode(str::AbstractString)
+        try
+            Base64.base64decode(str)
+        catch
+            try
+                Base64.base64decode(str * "=")
+            catch
+                Base64.base64decode(str * "==")
+            end
+        end
+    end
+end
+
 """
     provider_ehr_launch_part_three(
         config::ProviderEHRLaunchConfig,
@@ -210,14 +228,7 @@ function provider_ehr_launch_part_three(
     end
     authorization_code = location_queryparams["code"]::String
     state = location_queryparams["state"]::String
-    @static if Base.VERSION < v"1.9-"
-        # padding is needed for `base64decode` to work on older versions of Julia
-        # https://github.com/JuliaLang/julia/pull/44503
-        if !endswith(state, "==")
-            state = state * "=="
-        end
-    end
-    state_json = Base64.base64decode(state)
+    state_json = my_base64decode(state)
     state_dict = JSON3.read(state_json)
     token_endpoint_original = state_dict[:token_endpoint]::String
     token_endpoint_stripped = strip(token_endpoint_original)
