@@ -141,6 +141,7 @@ function provider_ehr_launch_part_one(
     if additional_state !== nothing
         merge!(state_dict, additional_state)
     end
+    state_dict[:iss] = iss
     state_dict[:token_endpoint] = token_endpoint
     state_json = JSON3.write(state_dict)
     state = Base64.base64encode(state_json)
