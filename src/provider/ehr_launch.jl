@@ -213,7 +213,11 @@ function provider_ehr_launch_part_three(
     @static if Base.VERSION < v"1.9-"
         # padding is needed for `base64decode` to work on older versions of Julia
         # https://github.com/JuliaLang/julia/pull/44503
-        if !endswith(state, "==")
+        if endswith(state, "==")
+            # do nothing
+        elseif endswith(state, "=")
+            # do nothing
+        else
             state = state * "=="
         end
     end
