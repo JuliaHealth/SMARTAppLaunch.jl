@@ -113,7 +113,7 @@ end
 
 ## Optional Keyword Arguments:
 - `scope::String`. Default value: `$(_default_scope)`.
-- `additional_state::Union{String, Nothing}`. Default value: `nothing`.
+- `additional_state::Union{Dict, Nothing}`. Default value: `nothing`.
 """
 function provider_ehr_launch_part_one(
     config::ProviderEHRLaunchConfig;
