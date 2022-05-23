@@ -1,7 +1,4 @@
-function check_iss_against_allowlist(
-    config::ProviderEHRLaunchConfig,
-    iss::AbstractString,
-)
+function check_iss_against_allowlist(config::ProviderEHRLaunchConfig, iss::AbstractString)
     if config.enforce_iss_allowlist
         iss_string = convert(String, iss)::String
         if iss_string in config.iss_allowlist

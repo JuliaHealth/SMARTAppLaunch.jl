@@ -13,10 +13,8 @@ const _default_scope = "launch"
 - `scope::String`. Default value: `$(_default_scope)`.
 """
 function provider_ehr_launch(
-        config::ProviderEHRLaunchConfig,
-        uri_string::AbstractString;
-        kwargs...,
-    )
+    config::ProviderEHRLaunchConfig, uri_string::AbstractString; kwargs...
+)
     uri = URIs.URI(uri_string)
     return provider_ehr_launch(config, uri; kwargs...)
 end
@@ -31,12 +29,8 @@ end
 ## Optional Keyword Arguments:
 - `scope::String`. Default value: `$(_default_scope)`.
 """
-function provider_ehr_launch(
-        config::ProviderEHRLaunchConfig,
-        uri::URIs.URI;
-        kwargs...,
-    )
-    queryparams = URIs.queryparams(uri)::Dict{String, String}
+function provider_ehr_launch(config::ProviderEHRLaunchConfig, uri::URIs.URI; kwargs...)
+    queryparams = URIs.queryparams(uri)::Dict{String,String}
     return provider_ehr_launch(config, queryparams; kwargs...)
 end
 
@@ -51,11 +45,9 @@ end
 - `scope::String`. Default value: `$(_default_scope)`.
 """
 function provider_ehr_launch(
-        config::ProviderEHRLaunchConfig,
-        queryparams::AbstractDict;
-        scope::String = _default_scope,
-    )
-    iss          = queryparams["iss"]::String
+    config::ProviderEHRLaunchConfig, queryparams::AbstractDict; scope::String=_default_scope
+)
+    iss = queryparams["iss"]::String
     launch_token = queryparams["launch"]::String
     return provider_ehr_launch(config; iss, launch_token, scope)
 end
@@ -76,25 +68,19 @@ end
 - `scope::String`. Default value: `$(_default_scope)`.
 """
 function provider_ehr_launch(
-        config::ProviderEHRLaunchConfig;
-        iss::String,
-        launch_token::String,
-        scope::String = _default_scope,
-    )
+    config::ProviderEHRLaunchConfig;
+    iss::String,
+    launch_token::String,
+    scope::String=_default_scope,
+)
     authorize_uri_with_querystring_params = provider_ehr_launch_part_one(
-        config;
-        iss,
-        launch_token,
-        scope,
+        config; iss, launch_token, scope
     )
     location_queryparams = provider_ehr_launch_part_two(
-        config,
-        authorize_uri_with_querystring_params,
+        config, authorize_uri_with_querystring_params
     )
     ehr_launch_result = provider_ehr_launch_part_three(
-        config,
-        location_queryparams;
-        launch_token,
+        config, location_queryparams; launch_token
     )
     return ehr_launch_result
 end
@@ -120,7 +106,7 @@ function provider_ehr_launch_part_one(
     iss::String,
     launch_token::String,
     scope::String=_default_scope,
-    additional_state::Union{Dict,Nothing}=nothing
+    additional_state::Union{Dict,Nothing}=nothing,
 )
     check_iss_against_allowlist(config, iss)
     iss_metadata_endpoint = "$(iss)/metadata"
@@ -128,9 +114,8 @@ function provider_ehr_launch_part_one(
         "GET",
         iss_metadata_endpoint;
         headers=Dict(
-            "Accept" => "application/fhir+json",
-            "Epic-Client-ID" => config.client_id,
-        )
+            "Accept" => "application/fhir+json", "Epic-Client-ID" => config.client_id
+        ),
     )
     metadata_response_json = JSON3.read(String(metadata_response.body))
     extension = metadata_response_json.rest[1].security.extension[1].extension
@@ -160,7 +145,7 @@ function provider_ehr_launch_part_one(
             "response_type" => "code",
             "scope" => scope,
             "state" => state_nopad,
-        )
+        ),
     )
     return authorize_uri_with_querystring_params
 end
@@ -172,13 +157,10 @@ end
     )
 """
 function provider_ehr_launch_part_two(
-        config::ProviderEHRLaunchConfig,
-        authorize_uri_with_querystring_params::URIs.URI,
-    )
+    config::ProviderEHRLaunchConfig, authorize_uri_with_querystring_params::URIs.URI
+)
     authorize_response = HTTP.request(
-        "GET",
-        authorize_uri_with_querystring_params;
-        redirect = false,
+        "GET", authorize_uri_with_querystring_params; redirect=false
     )
     headers = Dict(authorize_response.headers)
     let
@@ -225,15 +207,17 @@ end
     )
 """
 function provider_ehr_launch_part_three(
-        config::ProviderEHRLaunchConfig,
-        location_queryparams::AbstractDict;
-        launch_token::String = "", #used for debugging in case ehr provides it, might not be present in all ehrs
-    )
+    config::ProviderEHRLaunchConfig,
+    location_queryparams::AbstractDict;
+    launch_token::String="", #used for debugging in case ehr provides it, might not be present in all ehrs
+)
     let
         error_msg = "Encountered an error while trying to authenticate to the EHR."
-        haskey(location_queryparams, "error")             && @error "Error: $(location_queryparams["error"])"
-        haskey(location_queryparams, "error_description") && @error "Error description: $(location_queryparams["error_description"])"
-        haskey(location_queryparams, "code")              || throw(ErrorException(error_msg))
+        haskey(location_queryparams, "error") &&
+            @error "Error: $(location_queryparams["error"])"
+        haskey(location_queryparams, "error_description") &&
+            @error "Error description: $(location_queryparams["error_description"])"
+        haskey(location_queryparams, "code") || throw(ErrorException(error_msg))
     end
     authorization_code = location_queryparams["code"]::String
     state = location_queryparams["state"]::String
@@ -247,30 +231,30 @@ function provider_ehr_launch_part_three(
     end
     authz_code_info = _AuthorizationCodeInformation(;
         authorization_code,
-        client_id      = config.client_id,
-        redirect_uri   = config.redirect_uri,
-        token_endpoint = token_endpoint_stripped,
+        client_id=config.client_id,
+        redirect_uri=config.redirect_uri,
+        token_endpoint=token_endpoint_stripped,
     )
     access_token_info = authorization_code_to_access_token(authz_code_info)
     launch_token_is_jwt, launch_token_jwt_decoded = try_decode_jwt(launch_token)
     ehr_launch_result = ProviderEHRLaunchResult(;
-        authorization_code             = access_token_info.authorization_code,
-        authorization_code_is_jwt      = access_token_info.authorization_code_is_jwt,
-        authorization_code_jwt_decoded = access_token_info.authorization_code_jwt_decoded,
-        access_token                   = access_token_info.access_token,
-        access_token_is_jwt            = access_token_info.access_token_is_jwt,
-        access_token_jwt_decoded       = access_token_info.access_token_jwt_decoded,
-        access_token_response          = access_token_info.access_token_response,
-        launch_token                   = launch_token,
-        launch_token_is_jwt            = launch_token_is_jwt,
-        launch_token_jwt_decoded       = launch_token_jwt_decoded,
+        authorization_code=access_token_info.authorization_code,
+        authorization_code_is_jwt=access_token_info.authorization_code_is_jwt,
+        authorization_code_jwt_decoded=access_token_info.authorization_code_jwt_decoded,
+        access_token=access_token_info.access_token,
+        access_token_is_jwt=access_token_info.access_token_is_jwt,
+        access_token_jwt_decoded=access_token_info.access_token_jwt_decoded,
+        access_token_response=access_token_info.access_token_response,
+        launch_token=launch_token,
+        launch_token_is_jwt=launch_token_is_jwt,
+        launch_token_jwt_decoded=launch_token_jwt_decoded,
     )
     return ehr_launch_result
 end
 
 function _get_endpoints_from_extension(extension)
-    endpoints = Dict{String, String}()
-    for e ∈ extension
+    endpoints = Dict{String,String}()
+    for e in extension
         value_uri = e.valueUri
         url = e.url
         endpoints[url] = value_uri

@@ -42,34 +42,34 @@ end
 Base.@kwdef struct _AccessTokenInformation
     access_token::String
     access_token_is_jwt::Bool = false
-    access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
-    access_token_response::Dict{Symbol, Any}
+    access_token_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
+    access_token_response::Dict{Symbol,Any}
     authorization_code::String
     authorization_code_is_jwt::Bool = false
-    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    authorization_code_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
 end
 
 Base.@kwdef struct ProviderEHRLaunchResult
     access_token::String
     access_token_is_jwt::Bool = false
-    access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
-    access_token_response::Dict{Symbol, Any}
+    access_token_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
+    access_token_response::Dict{Symbol,Any}
     authorization_code::String
     authorization_code_is_jwt::Bool = false
-    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    authorization_code_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
     launch_token::String
     launch_token_is_jwt::Bool = false
-    launch_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    launch_token_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
 end
 
 Base.@kwdef struct ProviderStandaloneResult
     access_token::String
     access_token_is_jwt::Bool = false
-    access_token_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
-    access_token_response::Dict{Symbol, Any}
+    access_token_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
+    access_token_response::Dict{Symbol,Any}
     authorization_code::String
     authorization_code_is_jwt::Bool = false
-    authorization_code_jwt_decoded::Dict{String, Any} = Dict{String, Any}()
+    authorization_code_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
 end
 
 """
