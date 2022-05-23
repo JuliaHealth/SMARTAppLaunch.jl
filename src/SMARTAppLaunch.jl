@@ -1,15 +1,15 @@
 module SMARTAppLaunch
 
-import Base64
-import HTTP
-import HealthBase
-import JSON3
-import JSONWebTokens
-import URIs
+using Base64: Base64
+using HTTP: HTTP
+using HealthBase: HealthBase
+using JSON3: JSON3
+using JSONWebTokens: JSONWebTokens
+using URIs: URIs
 
 const get_fhir_access_token = HealthBase.get_fhir_access_token
-const get_fhir_patient_id   = HealthBase.get_fhir_patient_id
-const has_fhir_patient_id   = HealthBase.has_fhir_patient_id
+const get_fhir_patient_id = HealthBase.get_fhir_patient_id
+const has_fhir_patient_id = HealthBase.has_fhir_patient_id
 
 export ProviderEHRLaunchConfig
 export ProviderStandaloneConfig

@@ -11,12 +11,7 @@ makedocs(;
         canonical="https://JuliaHealth.github.io/SMARTAppLaunch.jl",
         assets=String[],
     ),
-    pages=[
-        "Home" => "index.md",
-        "API" => "api.md",
-    ],
+    pages=["Home" => "index.md", "API" => "api.md"],
 )
 
-deploydocs(;
-    repo="github.com/JuliaHealth/SMARTAppLaunch.jl",
-)
+deploydocs(; repo="github.com/JuliaHealth/SMARTAppLaunch.jl")
