@@ -26,6 +26,7 @@ include("code_to_token.jl")
 include("jwt.jl")
 
 include("provider/ehr_launch.jl")
+include("provider/iss_allowlist.jl")
 include("provider/standalone.jl")
 
 end # module
