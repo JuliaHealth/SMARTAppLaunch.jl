@@ -146,6 +146,9 @@ function provider_ehr_launch_part_one(
     state_json = JSON3.write(state_dict)
     state = Base64.base64encode(state_json)
 
+    # Remove any trailing `=` characters
+    state_nopad = rstrip(state, '=')
+
     authorize_uri_with_querystring_params = URIs.URI(
         URIs.URI(authorize_endpoint);
         query=Dict(
@@ -155,7 +158,7 @@ function provider_ehr_launch_part_one(
             "redirect_uri" => config.redirect_uri,
             "response_type" => "code",
             "scope" => scope,
-            "state" => state,
+            "state" => state_nopad,
         )
     )
     return authorize_uri_with_querystring_params
