@@ -31,7 +31,12 @@ jobs:
           token: ${{  secrets.GITHUB_TOKEN }}
           commit-message: '🤖 Automatically format the source code files'
           title: '🤖 Automatically format the source code files'
-          body: 'This pull request formats the source code files using the JuliaFormatter package.'
+          body: |-
+            This pull request formats the source code files using the JuliaFormatter package.
+
+            Note: CI will not automatically run on this PR.
+
+            Please close and re-open this PR in order to trigger CI.
           branch: bot/format_pr/${{ github.ref }}
           delete-branch: true
       - run: echo "The pull request number is ${{ steps.create_pr.outputs.pull-request-number }}"
