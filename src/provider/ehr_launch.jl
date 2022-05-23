@@ -194,18 +194,22 @@ end
 @static if Base.VERSION >= v"1.9-"
     const my_base64decode = Base64.base64decode
 else
-    # padding is needed for `base64decode` to work on older versions of Julia
-    # https://github.com/JuliaLang/julia/pull/44503
-    function my_base64decode(str::AbstractString)
-        try
-            Base64.base64decode(str)
-        catch
-            try
-                Base64.base64decode(str * "=")
-            catch
-                Base64.base64decode(str * "==")
-            end
+    function ensure_padded(str::String)
+        # If the length of `str` is not a multiple of 4, append `=` until it is.
+        remainder = mod(length(str), 4)::Int
+        if remainder == 0
+            pad_length = 0
+        else
+            pad_length = 4 - remainder
         end
+        pad = repeat('=', pad_length)::String
+        padded_str = (str * pad)::String
+        return padded_str
+    end
+    function my_base64decode(str::String)
+        padded_str = ensure_padded(str)::String
+        decoded = Base64.base64decode(padded_str)
+        return decoded
     end
 end
 
