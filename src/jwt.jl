@@ -4,5 +4,5 @@ function try_decode_jwt(contents::AbstractString)
         return true, jwt_decoded
     catch
     end
-    return false, Dict{String, Any}()
+    return false, Dict{String,Any}()
 end
