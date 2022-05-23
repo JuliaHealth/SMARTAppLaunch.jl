@@ -4,9 +4,15 @@
 ## Required Keyword Arguments:
 - `client_id::String`
 - `redirect_uri::String`
+
+## Optional Keyword Arguments:
+- `enforce_iss_allowlist::Bool`. Default value: `false`
+- `iss_allowlist::Vector{String}`. Default value: `String[]`
 """
 Base.@kwdef struct ProviderEHRLaunchConfig
     client_id::String
+    enforce_iss_allowlist::Bool = false
+    iss_allowlist::Vector{String} = String[]
     redirect_uri::String
 end
 
