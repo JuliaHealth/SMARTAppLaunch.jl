@@ -72,6 +72,8 @@ Base.@kwdef struct ProviderStandaloneResult
     authorization_code_jwt_decoded::Dict{String,Any} = Dict{String,Any}()
 end
 
+### ProviderEHRLaunchResult
+
 """
     HealthBase.get_fhir_access_token(result::ProviderEHRLaunchResult)
 """
@@ -92,6 +94,22 @@ end
 function HealthBase.get_fhir_patient_id(result::ProviderEHRLaunchResult)
     return result.access_token_response[:patient]
 end
+
+"""
+    HealthBase.has_fhir_encounter_id(result::ProviderEHRLaunchResult)
+"""
+function HealthBase.has_fhir_encounter_id(result::ProviderEHRLaunchResult)
+    return haskey(result.access_token_response, :encounter)
+end
+
+"""
+    HealthBase.get_fhir_encounter_id(result::ProviderEHRLaunchResult)
+"""
+function HealthBase.get_fhir_encounter_id(result::ProviderEHRLaunchResult)
+    return result.access_token_response[:encounter]
+end
+
+### ProviderStandaloneResult
 
 """
     HealthBase.get_fhir_access_token(result::ProviderStandaloneResult)
