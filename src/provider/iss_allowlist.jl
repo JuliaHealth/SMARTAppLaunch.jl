@@ -8,6 +8,7 @@ function check_iss_against_allowlist(config::ProviderEHRLaunchConfig, iss::Abstr
             throw(ErrorException(msg))
         end
     else
+        @warn "`enforce_iss_allowlist` is `false` - we strongly recommend setting it to `true`" maxlog=1
         if isempty(config.iss_allowlist)
             return nothing
         else
