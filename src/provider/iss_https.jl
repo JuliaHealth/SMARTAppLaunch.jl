@@ -9,7 +9,8 @@ function check_iss_https(config::ProviderEHRLaunchConfig, iss::AbstractString)
     if config.enforce_iss_https
         throw(ErrorException(msg))
     else
-        @warn "`enforce_iss_https` is `false` - we strongly recommend that you set it to `true`" maxlog=1
+        @warn "`enforce_iss_https` is `false` - we strongly recommend that you set it to `true`" maxlog =
+            1
         @warn msg
     end
 end
