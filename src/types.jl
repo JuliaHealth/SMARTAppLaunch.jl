@@ -6,11 +6,13 @@
 - `redirect_uri::String`
 
 ## Optional Keyword Arguments:
+- `enforce_iss_https::Bool`. Default value: `true`
 - `enforce_iss_allowlist::Bool`. Default value: `true`
 - `iss_allowlist::Vector{String}`. Default value: `String[]`
 """
 Base.@kwdef struct ProviderEHRLaunchConfig
     client_id::String
+    enforce_iss_https::Bool = true
     enforce_iss_allowlist::Bool = true
     iss_allowlist::Vector{String} = String[]
     redirect_uri::String

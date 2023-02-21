@@ -109,6 +109,7 @@ function provider_ehr_launch_part_one(
     additional_state::Union{Dict,Nothing}=nothing,
 )
     check_iss_against_allowlist(config, iss)
+    check_iss_https(config, iss)
     iss_metadata_endpoint = "$(iss)/metadata"
     metadata_response = HTTP.request(
         "GET",
