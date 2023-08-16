@@ -12,7 +12,7 @@ JSONWebTokens = "9b8beb19-0777-58c6-920b-28f749fee4d3"
 URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
 
 [compat]
-HTTP = "0.9.3"
+HTTP = "0.9.3, 1"
 HealthBase = "1.0.1"
 JSON3 = "1.5.1"
 JSONWebTokens = "1"
