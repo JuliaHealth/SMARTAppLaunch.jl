@@ -166,7 +166,7 @@ function provider_ehr_launch_part_two(
     headers = Dict(authorize_response.headers)
     let
         error_msg = string(
-            "Something when wrong when authenticating to the EHR. ",
+            "Something went wrong when authenticating to the EHR. ",
             "One possible explanation is that your `redirect_uri` value does not exactly ",
             "match any of the `redirect_uri` values that are on file with the EHR.",
         )
