@@ -164,10 +164,13 @@ function provider_ehr_launch_part_two(
         "GET", authorize_uri_with_querystring_params; redirect=false
     )
     headers = Dict(authorize_response.headers)
+    redirect_uri = config.redirect_uri
     let
         error_msg = string(
             "Something went wrong when authenticating to the EHR. ",
-            "One possible explanation is that your `redirect_uri` value does not exactly ",
+            "One possible explanation is that your `redirect_uri` value (`",
+            redirect_uri,
+            "`) does not exactly ",
             "match any of the `redirect_uri` values that are on file with the EHR.",
         )
         haskey(headers, "Location") || throw(ErrorException(error_msg))
